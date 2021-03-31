@@ -11,8 +11,8 @@ class Stress:
         self.K1 = self.sigma0 / (3.1415 * self.a)**0.5
     
     
-    def CalcArea(self):
-        self.theta = np.arange(-179,179.1, 1)
+    def calc_area(self):
+        self.theta = np.arange(-178,178.1, 1)
         self.r = np.arange(0.1,5,0.05)
         
         self.theta = np.radians(self.theta)
@@ -25,7 +25,7 @@ class Stress:
         sigma_x = k * (1 - np.sin(self.theta2/2) * np.sin(3*self.theta2/2))
         sigma_y = k * (1 + np.sin(self.theta2/2) * np.sin(3*self.theta2/2))
         tau_xy = k * np.sin(self.theta2/2) * np.cos(3*self.theta2/2)
-        sigma_z = 0.3 * (sigma_x + sigma_y)
+        sigma_z = 0.3 * (sigma_x + sigma_y) #平面ひずみ
         _mises = self.mises(sigma_x, sigma_y, sigma_z, tau_xy, 0, 0)
 
         x = self.r2 * np.cos(self.theta2)
@@ -36,17 +36,22 @@ class Stress:
     def mises(self, x, y, z, xy, yz, zx):
         return (0.5*((x-y)**2+(y-z)**2+(z-x)**2+3*(xy**2+yz**2+zx**2)))**0.5
 
+    def plot(self):
+        self.fig, self.ax = plt.subplots(figsize=(8, 6), dpi=100)
+        contr = self.ax.contourf(*ret, cmap="jet")
+        self.fig.colorbar(contr)
+        self.ax.set_xlim(-2, 2)
+        self.ax.set_ylim(-2, 2)
+        plt.show()
+
 
 if __name__ == "__main__":
     
     st = Stress(1000, 0.1)
-    st.CalcArea()
+    st.calc_area()
     ret = st.stress()
-    fig, ax = plt.subplots(figsize=(8,6), dpi=100)
-    contr = ax.contourf(*ret, cmap="jet")
-    ax.set_xlim(-2,2)
-    ax.set_ylim(-2,2)
-    fig.colorbar(contr)
-    plt.show()
+    st.plot()
+
+
 
 
