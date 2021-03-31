@@ -12,11 +12,10 @@ class Stress:
     
     
     def CalcArea(self):
-        self.theta = np.arange(-178,178.1,5)
-        self.r = np.arange(0.1,5,0.1)
+        self.theta = np.arange(-179,179.1, 1)
+        self.r = np.arange(0.1,5,0.05)
         
         self.theta = np.radians(self.theta)
-        self.r = np.radians(self.r)
 
         self.r2, self.theta2 = np.meshgrid(self.r, self.theta)
     
@@ -43,8 +42,10 @@ if __name__ == "__main__":
     st = Stress(1000, 0.1)
     st.CalcArea()
     ret = st.stress()
-    fig, ax = plt.subplots(2,2,figsize=(8,6), dpi=100)
-    contr = ax[0,0].contourf(*ret, cmap="jet")
+    fig, ax = plt.subplots(figsize=(8,6), dpi=100)
+    contr = ax.contourf(*ret, cmap="jet")
+    ax.set_xlim(-2,2)
+    ax.set_ylim(-2,2)
     fig.colorbar(contr)
     plt.show()
 
